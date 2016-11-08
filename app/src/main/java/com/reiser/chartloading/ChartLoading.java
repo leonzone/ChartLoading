@@ -49,6 +49,8 @@ public class ChartLoading extends View {
 
     private boolean mAutoPlay;
 
+    private boolean needRuning = true;
+
 
     private float linePercentage = 0.0f;
 
@@ -342,7 +344,9 @@ public class ChartLoading extends View {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                animatorSet.start();
+                if (mAutoPlay) {
+                    animatorSet.start();
+                }
             }
         });
 
@@ -404,12 +408,14 @@ public class ChartLoading extends View {
 
     public void startLoading() {
         if (animatorSet != null && !animatorSet.isRunning()) {
+            mAutoPlay = true;
             animatorSet.start();
         }
     }
 
     public void stopLoading() {
-        if (animatorSet != null && animatorSet.isStarted()) {
+        if (animatorSet != null && (animatorSet.isStarted() || animatorSet.isRunning())) {
+            mAutoPlay = false;
             animatorSet.end();
         }
     }
